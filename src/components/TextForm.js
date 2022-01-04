@@ -4,58 +4,35 @@ import PropTypes from 'prop-types'
 
 export default function TextForm(props) {
     const [text, setText] = useState('');
-    const [myStyle, setMyStyle] = useState({
-        backgroundColor: "white",
-        color: "black"
-    });
-    const [darkModeBtnText, setDarkModeBtnText] = useState('Enable Dark Mode');
-    
 
     const handleUppercaseText = ()=>{
         // console.log("Uppercase is Clicked.");
         let newText = text.toUpperCase();
         setText(newText);
+        props.showAlert("success", "Text has been converted to Uppercase.");
     }
     const handleLowercaseText = ()=>{
         // console.log("Lowercase is Clicked.");
         let newText = text.toLowerCase();
         setText(newText);
+        props.showAlert("success", "Text has been converted to Lowercase.");
     }
     const handleClearText = ()=>{
         // console.log("Cleartext is Clicked.");
         let newText = '';
         setText(newText);
+        props.showAlert("success", "Text has been cleared.");
     }
-
+    
     const handleCopyText = (event)=>{
         // console.log("Copy Text is Clicked.");
         let textAreaElm = document.getElementById('textInput');
         textAreaElm.select();
         // navigator.clipboard.writeText(text);
         navigator.clipboard.writeText(textAreaElm.value);
+        props.showAlert("success", "Text has been Copied.");
     }
-
-    // Function which toggle between dark mode and white mode by seeing the color of the text
-    const toggleDarkMode = ()=>{
-        // console.log("Dark Mode Button is Clicked");
-        // Change to Dark mode 
-        if(myStyle.color === "black"){
-            setMyStyle({
-                backgroundColor: "#141414",
-                color: "white"
-            });
-            setDarkModeBtnText("Enable White Mode");
-        }
-        // Change to white mode 
-        else{
-            setMyStyle({
-                backgroundColor: "white",
-                color: "black"
-            });
-            setDarkModeBtnText("Enable Dark Mode");
-        }
-    }
-
+    
     const handleOnchange = (event)=>{
         // console.log("On Change");
         setText(event.target.value);
@@ -73,22 +50,21 @@ export default function TextForm(props) {
 
     return (
         <>
-            <div className="container my-3" style={myStyle}>
+            <div className={`container my-3 text-${props.mode==='light'?'dark':'light'}`}>
                 <div className="mb-3">
                     <label htmlFor="textInput" className="form-label"><h1>{props.heading}</h1></label>
-                    <textarea className="form-control" id="textInput" rows="8" value={text} onChange={handleOnchange} placeholder='Enter text here'></textarea>
+                    <textarea className="form-control" id="textInput" rows="8" value={text} onChange={handleOnchange} placeholder='Enter text here' style={props.mode==='light'?{backgroundColor: "white", color: "black"}:{backgroundColor: "#042743", color: "white"}}></textarea>
                     <p>{gettingWordsCount()} Words, {text.length} Characters and {(gettingWordsCount() * 0.008).toFixed(2)} Minutes Read</p>
                 </div>
                 <button className="btn btn-primary mx-1" onClick={handleUppercaseText}>Text to Uppercase</button>
                 <button className="btn btn-primary mx-1" onClick={handleLowercaseText}>Text to Lowercase</button>
                 <button className="btn btn-primary mx-1" onClick={handleClearText}>Clear Text</button>
                 <button className="btn btn-primary mx-1" onClick={handleCopyText}>Copy Text</button>
-                <button className="btn btn-primary mx-1" onClick={toggleDarkMode}>{darkModeBtnText}</button>
                 <hr />
             </div>
-            <div className="container my-3" style={myStyle}>
+            <div className={`container my-3 text-${props.mode==='light'?'dark':'light'}`}>
                 <h2>Preview</h2>
-                <p>{text}</p>
+                <p>{text.length===0?"Enter Text in the textarea to Preview.":text}</p>
             </div>
         </>
     );
