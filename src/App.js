@@ -1,9 +1,10 @@
 import { useState } from 'react/cjs/react.development';
 import './App.css';
 import Alerts from './components/Alerts';
-// import About from './components/About';
+import About from './components/About';
 import Navbar from './components/Navbar';
 import TextForm from './components/TextForm';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   const [mode, setMode] = useState("light")
@@ -28,17 +29,25 @@ function App() {
       type: type,
       msg : message
     });
+    document.title = "TextUtils - Alert";
     setTimeout(() => {
       setAlert(null);
+      document.title = "TextUtils - Home";
     }, 1500);
   }
 
   return (
     <>
-      <Navbar title='TextUtils' aboutText='About' mode={mode} changeMode={changeMode} />
-      <Alerts alert={alert} />
-      <TextForm mode={mode} showAlert={showAlert} />
-      {/* <About/> */}
+      <Router>
+        <Navbar title='TextUtils' aboutText='About' mode={mode} changeMode={changeMode} />
+        <Alerts alert={alert} />
+
+        <Routes>
+          <Route path="/" element={<TextForm mode={mode} showAlert={showAlert} />} />
+          <Route path="/about" element={<About/>} />
+        </Routes>
+        
+      </Router>
     </>
   );
 }

@@ -47,7 +47,6 @@ export default function TextForm(props) {
     }
 
   
-
     return (
         <>
             <div className={`container my-3 text-${props.mode==='light'?'dark':'light'}`}>
