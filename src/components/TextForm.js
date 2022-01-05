@@ -39,11 +39,8 @@ export default function TextForm(props) {
     }
 
     const gettingWordsCount = ()=>{
-        let count = text.split(" ").length;
-        if(text.slice(-1) === ' ' || text === ''){
-            count-=1;
-        }
-        return count;
+        let count = text.split(/\s+/).filter((element)=>{return element.length!==0}).length;
+        return count;   
     }
 
   
@@ -52,18 +49,18 @@ export default function TextForm(props) {
             <div className={`container my-3 text-${props.mode==='light'?'dark':'light'}`}>
                 <div className="mb-3">
                     <label htmlFor="textInput" className="form-label"><h1>{props.heading}</h1></label>
-                    <textarea className="form-control" id="textInput" rows="8" value={text} onChange={handleOnchange} placeholder='Enter text here' style={props.mode==='light'?{backgroundColor: "white", color: "black"}:{backgroundColor: "#042743", color: "white"}}></textarea>
+                    <textarea className="form-control" id="textInput" rows="8" value={text} onChange={handleOnchange} placeholder='Enter text here' style={props.mode==='light'?{backgroundColor: "white", color: "black"}:{backgroundColor: "#244a68", color: "white"}}></textarea>
                     <p>{gettingWordsCount()} Words, {text.length} Characters and {(gettingWordsCount() * 0.008).toFixed(2)} Minutes Read</p>
                 </div>
-                <button className="btn btn-primary mx-1" onClick={handleUppercaseText}>Text to Uppercase</button>
-                <button className="btn btn-primary mx-1" onClick={handleLowercaseText}>Text to Lowercase</button>
-                <button className="btn btn-primary mx-1" onClick={handleClearText}>Clear Text</button>
-                <button className="btn btn-primary mx-1" onClick={handleCopyText}>Copy Text</button>
+                <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleUppercaseText}>Text to Uppercase</button>
+                <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleLowercaseText}>Text to Lowercase</button>
+                <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleClearText}>Clear Text</button>
+                <button disabled={text.length === 0} className="btn btn-primary mx-1 my-1" onClick={handleCopyText}>Copy Text</button>
                 <hr />
             </div>
             <div className={`container my-3 text-${props.mode==='light'?'dark':'light'}`}>
                 <h2>Preview</h2>
-                <p>{text.length===0?"Enter Text in the textarea to Preview.":text}</p>
+                <p>{text.length===0?"Nothing to Preview.":text}</p>
             </div>
         </>
     );
